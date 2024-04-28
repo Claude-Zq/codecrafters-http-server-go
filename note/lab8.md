@@ -46,9 +46,9 @@ func main() {
 }
 ```
 
-测试：
 
-```shell
+
+```
 qing@QingdeMacBook-Pro http % codecrafters test
 Initiating test run...
 
