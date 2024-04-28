@@ -41,7 +41,7 @@ func (s Server) Start(port int) error {
 		if err != nil {
 			return err
 		}
-		s.handleConnection(conn)
+		go s.handleConnection(conn)
 	}
 }
 
