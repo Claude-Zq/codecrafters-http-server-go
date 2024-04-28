@@ -15,6 +15,9 @@ func main() {
 			res.SetContent("text/plain", req.Path[index+6:])
 		}
 	})
+	server.SetHandler("/user-agent", func(req *http.Request, res *http.Response) {
+		res.SetContent("text/plain", req.Headers[http.HeaderUserAgent])
+	})
 
 	if err := server.Start(4221); err != nil {
 		panic(err)

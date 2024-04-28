@@ -83,7 +83,7 @@ func readLine(reader *bufio.Reader) ([]byte, error) {
 
 // Request represents an HTTP request.
 func readRequest(conn net.Conn) (*Request, error) {
-	var req Request
+	req := Request{Headers: make(map[string]string)}
 	reader := bufio.NewReader(conn)
 	requestLine, err := readLine(reader)
 	if err != nil {
@@ -96,6 +96,21 @@ func readRequest(conn net.Conn) (*Request, error) {
 	req.Method = requestParts[0]
 	req.Path = requestParts[1]
 	req.HttpVersion = requestParts[2]
+
+	for {
+		headerLine, err := readLine(reader)
+		if err != nil {
+			return nil, err
+		} else if len(headerLine) == 0 {
+			break
+		}
+		headerParts := strings.SplitN(string(headerLine), ": ", 2)
+		if len(headerParts) != 2 {
+			continue
+		}
+		req.Headers[headerParts[0]] = headerParts[1]
+	}
+
 	return &req, nil
 }
 
