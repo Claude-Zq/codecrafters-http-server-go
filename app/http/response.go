@@ -3,9 +3,11 @@ package http
 import "strconv"
 
 const (
-	StatusOK         = "200 OK"
-	StatusBadRequest = "400 Bad Request"
-	StatusNotFound   = "404 Not Found"
+	StatusOK                = "200 OK"
+	StatusCreated           = "201 Created"
+	StatusBadRequest        = "400 Bad Request"
+	StatusNotFound          = "404 Not Found"
+	StatusInternalServerErr = "500 Internal Server Error"
 )
 
 type Response struct {

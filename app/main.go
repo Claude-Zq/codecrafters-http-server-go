@@ -13,6 +13,9 @@ func main() {
 	var directory string
 	flag.StringVar(&directory, "directory", "files", "path to the files directory")
 	flag.Parse()
+	if err := os.MkdirAll(directory, 0777); err != nil {
+		panic(err)
+	}
 
 	server := http.NewServer()
 	server.SetHandler("/", func(req *http.Request, res *http.Response) {})
@@ -28,10 +31,19 @@ func main() {
 
 	server.SetHandler("/files/**", func(req *http.Request, res *http.Response) {
 		filePath := path.Join(directory, req.Path[len("/files/"):])
-		if content, err := os.ReadFile(filePath); err != nil {
-			res.Status = http.StatusNotFound
-		} else {
-			res.SetContent("application/octet-stream", string(content))
+		switch req.Method {
+		case http.MethodGet:
+			if content, err := os.ReadFile(filePath); err != nil {
+				res.Status = http.StatusNotFound
+			} else {
+				res.SetContent("application/octet-stream", string(content))
+			}
+		case http.MethodPost:
+			if err := os.WriteFile(filePath, []byte(req.Body), 0644); err != nil {
+				res.Status = http.StatusInternalServerErr
+			} else {
+				res.Status = http.StatusCreated
+			}
 		}
 	})
 

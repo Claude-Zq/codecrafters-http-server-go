@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 	"path"
+	"strconv"
 	"strings"
 )
 
@@ -111,7 +112,24 @@ func readRequest(conn net.Conn) (*Request, error) {
 		req.Headers[headerParts[0]] = headerParts[1]
 	}
 
-	return &req, nil
+	if req.Headers[HeaderContentLength] == "" {
+		return &req, nil
+	}
+	contentLength, err := strconv.Atoi(req.Headers[HeaderContentLength])
+	if err != nil {
+		return nil, err
+	}
+	body := strings.Builder{}
+	for i := 0; i < contentLength; i++ {
+		b, err := reader.ReadByte()
+		if err != nil {
+			return nil, err
+		}
+		body.WriteByte(b)
+	}
+	req.Body = body.String()
+	return &req, err
+
 }
 
 // sendResponse sends a response to the client.

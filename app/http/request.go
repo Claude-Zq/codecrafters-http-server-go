@@ -1,7 +1,8 @@
 package http
 
 const (
-	MethodGet = "GET"
+	MethodGet  = "GET"
+	MethodPost = "POST"
 )
 
 type Request struct {
@@ -9,4 +10,5 @@ type Request struct {
 	Headers     map[string]string
 	Method      string
 	Path        string
+	Body        string
 }
