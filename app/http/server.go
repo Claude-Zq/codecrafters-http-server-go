@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"path"
 	"strings"
 )
 
@@ -52,8 +53,8 @@ func (s Server) handleConnection(conn net.Conn) {
 	res.Headers[HeaderContentLength] = "0"
 	req, err := readRequest(conn)
 	if err == nil {
-		handler, ok := s.handlers[req.Path]
-		if ok {
+		handler := s.getHandler(req.Path)
+		if handler != nil {
 			handler(req, res)
 		} else {
 			res.Status = StatusNotFound
@@ -106,5 +107,23 @@ func sendResponse(conn net.Conn, res *Response) {
 		msg.WriteString(fmt.Sprintf("%s: %s\r\n", key, value))
 	}
 	msg.WriteString("\r\n")
+	msg.WriteString(res.content)
+
 	conn.Write([]byte(msg.String()))
+}
+
+func (s Server) getHandler(requestPath string) Handler {
+	// TODO: Implement path pattern-matching
+	handler, ok := s.handlers[requestPath]
+	if ok {
+		return handler
+	}
+	for requestPath != "/" {
+		requestPath = path.Dir(requestPath)
+		handler, ok := s.handlers[requestPath+"/**"]
+		if ok {
+			return handler
+		}
+	}
+	return nil
 }
