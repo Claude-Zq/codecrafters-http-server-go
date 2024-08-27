@@ -184,7 +184,7 @@ func sendResponse(conn net.Conn, res *Response) {
 ```go
 package main
 
-import "github.com/codecrafters-io/http-server-starter-go/app/http"
+import "github.com/Claude-Zq/http-server-starter-go/app/http"
 
 func main() {
 	server := http.NewServer()

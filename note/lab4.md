@@ -188,7 +188,7 @@ package main
 import (
 	"strings"
 
-	"github.com/codecrafters-io/http-server-starter-go/app/http"
+	"github.com/Claude-Zq/http-server-starter-go/app/http"
 )
 
 func main() {

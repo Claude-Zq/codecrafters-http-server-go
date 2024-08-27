@@ -6,6 +6,6 @@
 //
 // DON'T EDIT THIS!
 
-module github.com/codecrafters-io/http-server-starter-go
+module github.com/Claude-Zq/http-server-starter-go
 
 go 1.22
