@@ -6,7 +6,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/Claude-Zq/http-server-starter-go/app/http"
+	"github.com/Claude-Zq/codecrafters-http-server-go/app/http"
 )
 
 func main() {
